@@ -7,6 +7,12 @@ const links = [
   { label: "Partners", href: "#partners" },
 ];
 
+const legalLinks = [
+  { label: "Privacy Policy", href: "/privacy-policy" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
+  { label: "Refund Rules", href: "/refund-policy" },
+];
+
 export function Footer() {
   return (
     <footer className="relative isolate overflow-hidden border-t border-white/10 bg-[#050505] px-6 pt-16 pb-8 text-white sm:px-10 sm:pt-20 lg:px-16">
@@ -58,6 +64,31 @@ export function Footer() {
             © 2026 AWS SBG LPU. All rights reserved.
           </p>
         </div>
+
+        <nav
+          aria-label="Legal navigation"
+          className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/10 pt-5"
+        >
+          {legalLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[11px] text-white/45 transition-colors hover:text-[#FF2D87]"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <p className="mt-5 text-xs text-white/45">
+          Questions?{" "}
+          <a
+            href="mailto:awsbuilders@awslpu.in"
+            className="text-white/70 transition-colors hover:text-[#FF2D87]"
+          >
+            awsbuilders@awslpu.in
+          </a>
+        </p>
 
         <p className="mt-5 max-w-3xl text-[11px] leading-5 text-white/30">
           AWS re:Invent Watch & Build Party hosted by the AWS Student Builder Group at Lovely Professional University is an official community event recognized and listed on the AWS Builder network.
