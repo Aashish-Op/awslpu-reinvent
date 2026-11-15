@@ -20,6 +20,33 @@ export const metadata: Metadata = {
 
   applicationName: "Re:Invent Fest 2026",
 
+  keywords: [
+    "Re:Invent Fest 2026",
+    "AWS reInvent LPU",
+    "AWS Student Builder Group",
+    "AWS Student Builder Group LPU",
+    "Lovely Professional University tech fest",
+    "LPU tech fest 2026",
+    "cloud computing festival India",
+    "AWS hackathon Punjab",
+    "student tech festival Punjab",
+    "AWS workshops for students",
+  ],
+
+  authors: [{ name: "AWS Student Builder Group LPU", url: "https://reinvent.awslpu.in" }],
+  creator: "AWS Student Builder Group LPU",
+  publisher: "AWS Student Builder Group LPU",
+
+  alternates: {
+    canonical: "/",
+  },
+
+  // Paste the token from Google Search Console (HTML tag method) into
+  // GOOGLE_SITE_VERIFICATION to verify ownership of the domain.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
+
   openGraph: {
     type: "website",
     url: "https://reinvent.awslpu.in",

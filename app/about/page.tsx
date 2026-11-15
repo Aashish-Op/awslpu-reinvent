@@ -1,5 +1,15 @@
 import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
+import type { Metadata } from "next";
+import { OG_IMAGE } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn about Re:Invent Fest 2026 and the AWS Student Builder Group at Lovely Professional University, Punjab: a student-run community for cloud builders.",
+  alternates: { canonical: "/about" },
+  openGraph: { url: "/about", title: "About | Re:Invent Fest 2026", images: [OG_IMAGE] },
+};
 
 const experiences = [
   {
