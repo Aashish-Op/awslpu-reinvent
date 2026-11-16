@@ -8,10 +8,8 @@ import {
   ShieldCheck,
   AlertCircle,
   ArrowRight,
-  Sparkles,
   Ticket as TicketIcon,
   Clock,
-  ArrowUpRight,
   Lock,
   Loader2,
   Info
@@ -19,10 +17,6 @@ import {
 import { useAuth } from "@/providers/auth-provider"
 import { openRazorpayCheckout } from "@/lib/razorpay"
 import type { TicketCategory, Order, Ticket } from "@/types/ticketing"
-
-interface CartSelection {
-  [categoryId: string]: number
-}
 
 const tierPerks: Record<string, string[]> = {
   "student pass (early bird)": [
@@ -172,7 +166,7 @@ export default function TicketsPage() {
       setPollingStatus("Opening Razorpay payment gateway...")
 
       const checkoutData = order.checkout || {
-        key: order.razorpay_key_id || "rzp_test_TxGH1dx8IuuXrD",
+        key: order.razorpay_key_id || "",
         order_id: order.razorpay_order_id || "",
         amount: order.total_amount,
         currency: order.currency || "INR"
@@ -254,7 +248,7 @@ export default function TicketsPage() {
 
             <h1 className="text-[clamp(2.8rem,7vw,6.5rem)] font-light leading-[0.88] tracking-[-0.075em]">
               Choose your{" "}
-              <span className="bg-gradient-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
                 pass.
               </span>
             </h1>
@@ -320,7 +314,7 @@ export default function TicketsPage() {
                 <p className="mt-4 text-xs uppercase tracking-widest">Loading available passes...</p>
               </div>
             ) : categories.length === 0 ? (
-              <div className="flex flex-col items-center justify-center border border-white/10 bg-white/[0.01] py-20 text-center">
+              <div className="flex flex-col items-center justify-center border border-white/10 bg-white/1 py-20 text-center">
                 <TicketIcon className="h-10 w-10 text-white/30 mb-3" />
                 <h3 className="text-xl font-light text-white">No passes currently available</h3>
                 <p className="mt-2 text-xs text-white/50 max-w-md">
@@ -350,8 +344,8 @@ export default function TicketsPage() {
                         isSelected
                           ? "border-[#FF00D4] bg-linear-to-b from-[#FF00D4]/20 via-[#FF00D4]/5 to-transparent shadow-[0_0_45px_rgba(255,0,212,0.25)]"
                           : isHighlight
-                          ? "border-[#FF00D4]/60 bg-linear-to-b from-[#FF00D4]/10 via-white/[0.02] to-transparent shadow-[0_0_30px_rgba(255,0,212,0.1)]"
-                          : "border-white/10 bg-white/[0.02] hover:border-white/30"
+                          ? "border-[#FF00D4]/60 bg-linear-to-b from-[#FF00D4]/10 via-white/2 to-transparent shadow-[0_0_30px_rgba(255,0,212,0.1)]"
+                          : "border-white/10 bg-white/2 hover:border-white/30"
                       }`}
                     >
                       {isHighlight && (
@@ -404,7 +398,7 @@ export default function TicketsPage() {
                             Pass Sold Out
                           </div>
                         ) : existingTicket ? (
-                          <div className="flex h-12 w-full items-center justify-center border border-white/10 bg-white/[0.02] text-xs uppercase tracking-wider text-white/40">
+                          <div className="flex h-12 w-full items-center justify-center border border-white/10 bg-white/2 text-xs uppercase tracking-wider text-white/40">
                             Limit Reached (1 Pass Owned)
                           </div>
                         ) : (
@@ -414,7 +408,7 @@ export default function TicketsPage() {
                             className={`flex h-12 w-full items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all duration-200 ${
                               isSelected
                                 ? "bg-[#FF00D4] text-white shadow-[0_0_24px_rgba(255,0,212,0.4)]"
-                                : "border border-white/25 text-white hover:border-[#FF00D4] hover:bg-white/[0.04]"
+                                : "border border-white/25 text-white hover:border-[#FF00D4] hover:bg-white/4"
                             }`}
                           >
                             {isSelected ? (
@@ -465,7 +459,7 @@ export default function TicketsPage() {
         )}
 
         {checkoutStep === "review" && selectedCategory && (
-          <div className="mx-auto mt-12 max-w-2xl border border-white/10 bg-white/[0.02] p-8 sm:p-12">
+          <div className="mx-auto mt-12 max-w-2xl border border-white/10 bg-white/2 p-8 sm:p-12">
             <div className="flex items-center justify-between border-b border-white/10 pb-6">
               <div>
                 <span className="text-[10px] uppercase tracking-widest text-[#FF00D4]">
@@ -515,7 +509,7 @@ export default function TicketsPage() {
               </div>
             </div>
 
-            <div className="mt-10 border border-white/10 bg-white/[0.02] p-6">
+            <div className="mt-10 border border-white/10 bg-white/2 p-6">
               <h3 className="text-xs uppercase tracking-widest text-[#8B5CFF] mb-4">
                 Attendee Information
               </h3>
@@ -555,7 +549,7 @@ export default function TicketsPage() {
         )}
 
         {checkoutStep === "processing" && (
-          <div className="mx-auto mt-20 max-w-md border border-[#FF00D4]/40 bg-white/[0.02] p-12 text-center">
+          <div className="mx-auto mt-20 max-w-md border border-[#FF00D4]/40 bg-white/2 p-12 text-center">
             <Loader2 className="mx-auto h-12 w-12 animate-spin text-[#FF00D4]" />
             <h3 className="mt-6 text-xl font-light text-white">Processing Booking</h3>
             <p className="mt-3 text-xs leading-relaxed text-white/55">{pollingStatus}</p>
