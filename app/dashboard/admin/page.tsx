@@ -38,25 +38,35 @@ interface CategoryStat {
 }
 
 interface RecentOrder {
-  order_id: string
-  status: string
-  total_amount_paise: number
-  currency: string
-  created_at: string
-  attendee_name: string
-  attendee_email: string
-  items: Array<{ category_name: string; quantity: number }>
+  id?: string
+  order_id?: string
+  status?: string
+  total_amount?: number
+  total_amount_paise?: number
+  currency?: string
+  created_at?: string
+  user_name?: string
+  attendee_name?: string
+  user_email?: string
+  attendee_email?: string
+  items?: Array<{ category_name: string; quantity: number }>
 }
 
 interface AnalyticsData {
-  total_orders: number
-  paid_orders_count: number
-  pending_orders_count: number
-  failed_orders_count: number
-  cancelled_orders_count: number
-  total_revenue_paise: number
-  category_stats: CategoryStat[]
-  recent_orders: RecentOrder[]
+  total_orders?: number
+  paid_orders?: number
+  paid_orders_count?: number
+  pending_orders?: number
+  pending_orders_count?: number
+  failed_orders?: number
+  failed_orders_count?: number
+  cancelled_orders?: number
+  cancelled_orders_count?: number
+  total_revenue_in_inr?: number
+  total_revenue_paise?: number
+  categories?: CategoryStat[]
+  category_stats?: CategoryStat[]
+  recent_orders?: RecentOrder[]
 }
 
 interface SessionItem {
@@ -373,17 +383,23 @@ export default function AdminDashboardPage() {
     )
   }
 
-  const filteredOrders = (analytics?.recent_orders || []).filter((o) => {
+  const rawOrders = analytics?.recent_orders || []
+  const filteredOrders = rawOrders.filter((o) => {
     if (!orderSearch) return true
     const term = orderSearch.toLowerCase()
-    return (
-      o.order_id.toLowerCase().includes(term) ||
-      o.attendee_name.toLowerCase().includes(term) ||
-      o.attendee_email.toLowerCase().includes(term)
-    )
+    const id = String(o.id || o.order_id || "").toLowerCase()
+    const name = String(o.user_name || o.attendee_name || "").toLowerCase()
+    const email = String(o.user_email || o.attendee_email || "").toLowerCase()
+    return id.includes(term) || name.includes(term) || email.includes(term)
   })
 
-  const totalRevenue = ((analytics?.total_revenue_paise || 0) / 100).toLocaleString("en-IN")
+  const totalRevenue = (
+    analytics?.total_revenue_in_inr !== undefined
+      ? analytics.total_revenue_in_inr
+      : ((analytics?.total_revenue_paise || 0) / 100)
+  ).toLocaleString("en-IN")
+
+  const categoryList = analytics?.categories || analytics?.category_stats || []
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
@@ -471,7 +487,7 @@ export default function AdminDashboardPage() {
               <Users className="h-4 w-4 text-[#FF00D4]" />
             </div>
             <p className="mt-3 text-3xl font-light text-white">
-              {analytics?.paid_orders_count ?? 0}
+              {analytics?.paid_orders ?? analytics?.paid_orders_count ?? 0}
             </p>
             <p className="mt-1 text-[11px] text-white/40">
               Across {analytics?.total_orders ?? 0} total attempted orders
@@ -493,10 +509,10 @@ export default function AdminDashboardPage() {
               <Ticket className="h-4 w-4 text-[#8B5CFF]" />
             </div>
             <p className="mt-3 text-3xl font-light text-white">
-              {analytics?.category_stats?.length ?? 0}
+              {categoryList.length}
             </p>
             <p className="mt-1 text-[11px] text-white/40">
-              {analytics?.category_stats?.reduce((acc, c) => acc + (c.quantity_sold || 0), 0) ?? 0} passes issued
+              {categoryList.reduce((acc, c) => acc + (c.quantity_sold || 0), 0)} passes issued
             </p>
           </div>
 
@@ -562,7 +578,7 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="grid gap-6 md:grid-cols-3">
-                {(analytics?.category_stats || []).map((cat) => {
+                {categoryList.map((cat) => {
                   const pct = cat.quantity > 0 ? Math.min(100, Math.round((cat.quantity_sold / cat.quantity) * 100)) : 0
                   return (
                     <div key={cat.id} className="border border-white/10 bg-black/40 p-5">
@@ -630,19 +646,25 @@ export default function AdminDashboardPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5 font-mono text-[11px]">
-                      {filteredOrders.map((ord) => {
+                      {filteredOrders.map((ord, idx) => {
+                        const orderId = String(ord.id || ord.order_id || `order-${idx}`)
+                        const displayId = orderId.length > 8 ? orderId.slice(-8) : orderId
+                        const attendeeName = ord.user_name || ord.attendee_name || "—"
+                        const attendeeEmail = ord.user_email || ord.attendee_email || "—"
                         const isPaid = ord.status === "paid"
                         const isFailed = ord.status === "failed"
+                        const amount = ((ord.total_amount ?? ord.total_amount_paise ?? 0) / 100).toFixed(2)
+
                         return (
-                          <tr key={ord.order_id} className="hover:bg-white/[0.02]">
+                          <tr key={orderId} className="hover:bg-white/[0.02]">
                             <td className="py-3 px-3 text-[#FF2D87]">
-                              {ord.order_id.slice(-8)}
+                              {displayId}
                             </td>
                             <td className="py-3 px-3 font-sans text-white font-medium">
-                              {ord.attendee_name || "—"}
+                              {attendeeName}
                             </td>
                             <td className="py-3 px-3 text-white/55">
-                              {ord.attendee_email}
+                              {attendeeEmail}
                             </td>
                             <td className="py-3 px-3">
                               <span
@@ -654,14 +676,16 @@ export default function AdminDashboardPage() {
                                     : "bg-yellow-500/20 text-yellow-300 border border-yellow-500/40"
                                 }`}
                               >
-                                {ord.status}
+                                {ord.status || "pending"}
                               </span>
                             </td>
                             <td className="py-3 px-3 text-white">
-                              ₹{(ord.total_amount_paise / 100).toFixed(2)}
+                              ₹{amount}
                             </td>
                             <td className="py-3 px-3 text-white/60 font-sans">
-                              {ord.items?.map((it) => it.category_name).join(", ") || "1 Pass"}
+                              {ord.items && ord.items.length > 0
+                                ? ord.items.map((it) => it.category_name).join(", ")
+                                : "1 Pass"}
                             </td>
                             <td className="py-3 px-3 text-white/40">
                               {ord.created_at ? new Date(ord.created_at).toLocaleDateString() : "—"}
@@ -696,14 +720,14 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
-              {(analytics?.category_stats || []).map((cat) => (
-                <div key={cat.id} className="border border-white/10 bg-white/[0.02] p-6 flex flex-col justify-between">
+              {categoryList.map((cat) => (
+                <div key={cat.id || cat.name} className="border border-white/10 bg-white/[0.02] p-6 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] uppercase tracking-wider text-[#FF00D4] font-semibold">
                         {cat.is_active ? "Live on Store" : "Inactive"}
                       </span>
-                      <span className="font-mono text-xs text-white/40">ID: {cat.id.slice(-6)}</span>
+                      <span className="font-mono text-xs text-white/40">ID: {cat.id ? cat.id.slice(-6) : "—"}</span>
                     </div>
 
                     <h4 className="mt-3 text-xl font-light text-white">{cat.name}</h4>
