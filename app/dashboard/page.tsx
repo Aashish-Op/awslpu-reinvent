@@ -204,6 +204,16 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {Array.isArray(user.roles) && user.roles.includes("admin") && (
+              <Link
+                href="/dashboard/admin"
+                className="flex h-10 items-center justify-center gap-2 border border-[#FF00D4] bg-linear-to-r from-[#FF00D4] to-[#702cff] px-5 text-xs font-semibold uppercase tracking-[0.12em] text-white shadow-[0_0_20px_rgba(255,0,212,0.3)] hover:opacity-90"
+              >
+                <ShieldCheck className="h-3.5 w-3.5" />
+                <span>Admin Console</span>
+              </Link>
+            )}
+
             <div className="flex items-center gap-2 border border-emerald-400/20 bg-emerald-400/[0.06] px-4 py-2.5 text-xs text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               Verified Attendee
