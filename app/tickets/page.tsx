@@ -102,6 +102,20 @@ export default function TicketsPage() {
     checkUserTickets()
   }, [authenticated])
 
+  const refreshExistingTicket = async () => {
+    try {
+      const res = await fetch("/api/tickets", { cache: "no-store" })
+      if (res.ok) {
+        const data = await res.json()
+        if (data.tickets && data.tickets.length > 0) {
+          setExistingTicket(data.tickets[0])
+        }
+      }
+    } catch {
+      // ignore; the dashboard will show the ticket
+    }
+  }
+
   const toggleSelectCategory = (categoryId: string) => {
     if (existingTicket) return
     setSelectedCategoryId((prev) => (prev === categoryId ? null : categoryId))
@@ -127,6 +141,10 @@ export default function TicketsPage() {
   const handleProceedPayment = async () => {
     if (!authenticated) {
       router.push("/auth?mode=login&redirect=/tickets")
+      return
+    }
+    if (existingTicket) {
+      setOrderError("You already have an active pass. Each attendee is strictly limited to 1 ticket.")
       return
     }
 
@@ -209,6 +227,7 @@ export default function TicketsPage() {
             const checkData: Order = await checkRes.json()
             if (checkData.status === "paid") {
               setCreatedOrder(checkData)
+              await refreshExistingTicket()
               setCheckoutStep("success")
               return
             }
@@ -222,7 +241,13 @@ export default function TicketsPage() {
         await new Promise((resolve) => setTimeout(resolve, 2000))
       }
 
-      setCheckoutStep("success")
+      // Payment went through at the gateway but the ticket is not issued yet.
+      // Do not claim success; tell the user it is still being processed.
+      await refreshExistingTicket()
+      setOrderError(
+        "Your payment was received, but your ticket is still being issued. Please check your dashboard in a minute — do not pay again."
+      )
+      setCheckoutStep("select")
     } catch (err) {
       setOrderError(err instanceof Error ? err.message : "Payment processing encountered an issue.")
       setCheckoutStep("review")
@@ -447,7 +472,8 @@ export default function TicketsPage() {
                   <button
                     type="button"
                     onClick={handleStartCheckout}
-                    className="flex h-12 items-center justify-center gap-3 bg-linear-to-r from-[#FF00D4] to-[#702cff] px-8 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-all hover:opacity-95"
+                    disabled={checkingExisting || !!existingTicket}
+                    className="flex h-12 disabled:cursor-not-allowed disabled:opacity-40 items-center justify-center gap-3 bg-linear-to-r from-[#FF00D4] to-[#702cff] px-8 text-xs font-semibold uppercase tracking-[0.15em] text-white transition-all hover:opacity-95"
                   >
                     <span>Proceed to Checkout</span>
                     <ArrowRight className="h-4 w-4" />
@@ -535,7 +561,8 @@ export default function TicketsPage() {
               <button
                 type="button"
                 onClick={handleProceedPayment}
-                className="flex h-14 w-full items-center justify-center gap-3 bg-linear-to-r from-[#FF00D4] to-[#702cff] text-xs font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_30px_rgba(255,0,212,0.3)] transition-all hover:opacity-95"
+                disabled={checkingExisting || !!existingTicket}
+                className="flex h-14 disabled:cursor-not-allowed disabled:opacity-40 w-full items-center justify-center gap-3 bg-linear-to-r from-[#FF00D4] to-[#702cff] text-xs font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_30px_rgba(255,0,212,0.3)] transition-all hover:opacity-95"
               >
                 <Lock className="h-4 w-4" />
                 <span>Pay ₹{totalAmount.toLocaleString("en-IN")} via Razorpay</span>
