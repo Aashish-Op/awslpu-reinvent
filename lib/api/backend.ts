@@ -1,26 +1,34 @@
 import "server-only"
 
-const BACKEND_API_URL = process.env.BACKEND_API_URL
-const BACKEND_API_KEY = process.env.BACKEND_API_KEY
-
-if (!BACKEND_API_URL) {
-  throw new Error("BACKEND_API_URL is not configured")
+function getBackendApiUrl(): string {
+  const url = process.env.BACKEND_API_URL
+  if (!url) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("BACKEND_API_URL is not configured")
+    }
+    return "http://localhost:8000"
+  }
+  return url
 }
 
-const backendApiUrl = BACKEND_API_URL
+export function getBackendApiKey(): string {
+  return process.env.BACKEND_API_KEY || process.env.X_API_KEY || ""
+}
 
 export async function backendFetch(
   path: string,
   options: RequestInit = {}
 ): Promise<Response> {
+  const backendApiUrl = getBackendApiUrl()
+  const apiKey = getBackendApiKey()
   const headers = new Headers(options.headers)
 
   if (options.body && !(options.body instanceof FormData)) {
     headers.set("Content-Type", "application/json")
   }
 
-  if (BACKEND_API_KEY && !headers.has("X-API-KEY")) {
-    headers.set("X-API-KEY", BACKEND_API_KEY)
+  if (apiKey && !headers.has("X-API-KEY")) {
+    headers.set("X-API-KEY", apiKey)
   }
 
   return fetch(`${backendApiUrl.replace(/\/$/, "")}${path}`, {

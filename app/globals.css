@@ -78,6 +78,22 @@ button {
   font: inherit;
 }
 
+/* Every clickable control shows the pointer cursor (disabled ones do not). */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+select,
+label[for],
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"]:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 img,
 video {
   display: block;

@@ -25,6 +25,7 @@ import {
 } from "lucide-react"
 import { useAuth } from "@/providers/auth-provider"
 import { QrCode } from "@/components/qr-code"
+import { PassLanyard } from "@/components/pass-lanyard"
 import type { Ticket } from "@/types/ticketing"
 import type { Venue } from "@/types/schedule"
 
@@ -204,6 +205,16 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {Array.isArray(user.roles) && user.roles.includes("admin") && (
+              <Link
+                href="/dashboard/admin"
+                className="flex h-10 items-center justify-center gap-2 border border-[#FF00D4] bg-linear-to-r from-[#FF00D4] to-[#702cff] px-5 text-xs font-semibold uppercase tracking-[0.12em] text-white shadow-[0_0_20px_rgba(255,0,212,0.3)] hover:opacity-90"
+              >
+                <ShieldCheck className="h-3.5 w-3.5" />
+                <span>Admin Console</span>
+              </Link>
+            )}
+
             <div className="flex items-center gap-2 border border-emerald-400/20 bg-emerald-400/[0.06] px-4 py-2.5 text-xs text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               Verified Attendee
@@ -339,29 +350,22 @@ export default function DashboardPage() {
                       <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/10 border-t-[#FF00D4]" />
                     </div>
                   ) : tickets.length > 0 ? (
-                    <div className="mt-6 space-y-3">
-                      {tickets.slice(0, 3).map((t) => (
-                        <div
-                          key={t.id}
-                          onClick={() => {
-                            setSelectedTicket(t)
-                            setActiveTab("tickets")
-                          }}
-                          className="group cursor-pointer border border-white/10 bg-black/40 p-3.5 transition-all hover:border-[#FF00D4]/70"
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-medium text-white group-hover:text-[#FF2D87]">
-                              {t.category_name}
-                            </span>
-                            <span className="text-[10px] uppercase text-emerald-400">
-                              {t.status}
-                            </span>
-                          </div>
-                          <p className="mt-1 font-mono text-[10px] text-white/40">
-                            {t.ticket_code.slice(0, 16)}...
-                          </p>
-                        </div>
-                      ))}
+                    <div className="relative mt-4 h-[460px] w-full">
+                      <PassLanyard
+                        category={tickets[0].category_name}
+                        holder={user ? `${user.first_name} ${user.last_name}` : ""}
+                        ticketCode={tickets[0].ticket_code}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedTicket(tickets[0])
+                          setActiveTab("tickets")
+                        }}
+                        className="absolute bottom-0 right-0 cursor-pointer text-[10px] uppercase tracking-wider text-white/50 hover:text-[#FF2D87]"
+                      >
+                        {tickets[0].status} · View ticket →
+                      </button>
                     </div>
                   ) : (
                     <div className="my-8 text-center">
