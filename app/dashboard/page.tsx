@@ -185,7 +185,7 @@ export default function DashboardPage() {
     <main className="min-h-screen bg-[#050505] text-white">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(108,0,255,0.12),transparent_55%)]" />
 
-      <section className="relative mx-auto max-w-[1500px] px-5 pb-24 pt-32 sm:px-10 sm:pt-40 lg:px-16">
+      <section className="relative mx-auto max-w-375 px-5 pb-24 pt-32 sm:px-10 sm:pt-40 lg:px-16">
         <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-10 sm:flex-row sm:items-end">
           <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#FF2D87]">
@@ -194,7 +194,7 @@ export default function DashboardPage() {
 
             <h1 className="text-4xl font-light tracking-[-0.06em] sm:text-6xl">
               Welcome,{" "}
-              <span className="bg-gradient-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
                 {user.first_name}.
               </span>
             </h1>
@@ -205,17 +205,8 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            {Array.isArray(user.roles) && user.roles.includes("admin") && (
-              <Link
-                href="/dashboard/admin"
-                className="flex h-10 items-center justify-center gap-2 border border-[#FF00D4] bg-linear-to-r from-[#FF00D4] to-[#702cff] px-5 text-xs font-semibold uppercase tracking-[0.12em] text-white shadow-[0_0_20px_rgba(255,0,212,0.3)] hover:opacity-90"
-              >
-                <ShieldCheck className="h-3.5 w-3.5" />
-                <span>Admin Console</span>
-              </Link>
-            )}
 
-            <div className="flex items-center gap-2 border border-emerald-400/20 bg-emerald-400/[0.06] px-4 py-2.5 text-xs text-emerald-400">
+            <div className="flex items-center gap-2 border border-emerald-400/20 bg-emerald-400/6 px-4 py-2.5 text-xs text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               Verified Attendee
             </div>
@@ -224,7 +215,7 @@ export default function DashboardPage() {
               href="/tickets"
               className="flex h-10 items-center justify-center border border-[#FF00D4] bg-[#FF00D4]/20 px-5 text-xs font-semibold uppercase tracking-[0.12em] text-white hover:bg-[#FF00D4]/30 transition-all shadow-[0_0_20px_rgba(255,0,212,0.2)]"
             >
-              Get More Passes
+              Get Pass
             </Link>
           </div>
         </div>
@@ -284,7 +275,7 @@ export default function DashboardPage() {
         {activeTab === "overview" && (
           <div className="mt-8 space-y-8">
             <div className="grid gap-5 lg:grid-cols-[1.5fr_0.9fr]">
-              <div className="relative overflow-hidden border border-white/10 bg-white/[0.025] p-8 sm:p-12">
+              <div className="relative overflow-hidden border border-white/10 bg-white/2.5 p-8 sm:p-12">
                 <div className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-[#8B5CFF]/15 blur-[100px]" />
 
                 <div className="relative">
@@ -297,7 +288,7 @@ export default function DashboardPage() {
                     <br />
                     Build.
                     <br />
-                    <span className="bg-gradient-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
                       Re:Invent.
                     </span>
                   </h2>

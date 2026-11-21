@@ -351,7 +351,7 @@ export default function ExperiencePage() {
         </div>
       </section>
 
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-16 bg-gradient-to-t from-[#050505]/40 to-transparent" />
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-16 bg-linear-to-t from-[#050505]/40 to-transparent" />
     </main>
   );
 }

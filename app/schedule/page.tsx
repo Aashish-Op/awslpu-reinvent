@@ -153,7 +153,7 @@ export default function SchedulePage() {
             </div>
 
             <h1 className="text-4xl font-light tracking-[-0.06em] text-white sm:text-6xl lg:text-7xl">
-              Festival <span className="bg-gradient-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">Program</span>
+              Festival <span className="bg-linear-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">Program</span>
             </h1>
 
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/60 sm:text-base">
@@ -404,7 +404,7 @@ export default function SchedulePage() {
                             <User className="h-16 w-16" />
                           </div>
                         )}
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
                       </div>
 
                       <div className="mt-6">

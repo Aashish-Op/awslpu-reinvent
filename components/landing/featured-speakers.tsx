@@ -43,7 +43,7 @@ export function FeaturedSpeakers() {
 
             <h2 className="text-4xl font-light tracking-[-0.06em] sm:text-6xl">
               Learn from the{" "}
-              <span className="bg-gradient-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
                 masters.
               </span>
             </h2>
@@ -99,7 +99,7 @@ export function FeaturedSpeakers() {
                         {spk.full_name.charAt(0)}
                       </div>
                     )}
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
                   </div>
 
                   <div className="mt-5">

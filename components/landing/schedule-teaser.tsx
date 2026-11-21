@@ -88,7 +88,7 @@ export function ScheduleTeaser() {
 
             <h2 className="text-4xl font-light tracking-[-0.06em] sm:text-6xl">
               Five days of{" "}
-              <span className="bg-gradient-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-[#FF2D87] via-[#FF00D4] to-[#8B5CFF] bg-clip-text text-transparent">
                 discovery.
               </span>
             </h2>
