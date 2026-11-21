@@ -313,7 +313,7 @@ function AuthForm() {
                   </div>
 
                   <div className="border-b border-white/20 transition-colors focus-within:border-[#FF00D4]">
-                    <label className={labelClass}>Workspace Name *</label>
+                    <label className={labelClass}>Workspace/College/University Name *</label>
                     <input
                       type="text"
                       required
@@ -325,7 +325,7 @@ function AuthForm() {
                   </div>
 
                   <div className="border-b border-white/20 transition-colors focus-within:border-[#FF00D4]">
-                    <label className={labelClass}>Workspace ID *</label>
+                    <label className={labelClass}>Workspace/College/University ID *</label>
                     <input
                       type="text"
                       required
