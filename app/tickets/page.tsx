@@ -171,10 +171,7 @@ export default function TicketsPage() {
         !profile.first_name?.trim() ||
         !profile.last_name?.trim() ||
         !profile.phone?.trim() ||
-        !academic?.institution?.trim() ||
-        !academic?.degree?.trim() ||
-        !academic?.department?.trim() ||
-        !academic?.graduation_year
+        !academic?.institution?.trim()
       ) {
         router.push("/dashboard?tab=profile&checkout=profile-incomplete")
         return
